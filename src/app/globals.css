@@ -234,6 +234,28 @@
   animation: fadeUp 380ms ease both;
 }
 
+.panel-anim {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 280ms ease-out;
+}
+.panel-anim[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+.panel-anim > .panel-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel-anim {
+    transition: none;
+  }
+  .anim-fade-up,
+  .anim-pulse-glow {
+    animation: none;
+  }
+}
+
 @keyframes pulseGlow {
   0%, 100% { box-shadow: 0 0 0 0 hsl(45 90% 60% / 0.4); }
   50% { box-shadow: 0 0 0 10px hsl(45 90% 60% / 0); }

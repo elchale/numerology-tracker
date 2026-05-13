@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Settings } from "lucide-react";
 import { useConfig, useHydrated } from "@/store/useConfig";
 
 export function Header() {
@@ -41,7 +42,7 @@ export function Header() {
             className="chip hover:border-gold/40 transition"
             aria-label="Settings"
           >
-            <span aria-hidden>⚙</span>
+            <Settings size={13} strokeWidth={2} aria-hidden />
             <span className="hidden sm:inline">Settings</span>
           </Link>
         </div>

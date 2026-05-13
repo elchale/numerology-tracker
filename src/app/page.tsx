@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
+import { AlertCircle, ArrowRight, Crown } from "lucide-react";
 import { useConfig } from "@/store/useConfig";
 import { RequireConfig } from "@/components/RequireConfig";
 import { NumberCard } from "@/components/NumberCard";
@@ -106,7 +107,8 @@ function Dashboard() {
               className="chip"
               style={{ color: "var(--color-cyan)", borderColor: "#22d3ee55" }}
             >
-              ▲ Your Life Path activates today
+              <Crown size={12} strokeWidth={2.25} aria-hidden />
+              Your Life Path activates today
             </span>
           )}
           {info.isKarmic && (
@@ -114,7 +116,8 @@ function Dashboard() {
               className="chip"
               style={{ color: "var(--color-danger)", borderColor: "#dc262655" }}
             >
-              ! Karmic lesson on offer
+              <AlertCircle size={12} strokeWidth={2.25} aria-hidden />
+              Karmic lesson on offer
             </span>
           )}
           <p className="text-text/90 flex-1 min-w-[260px] text-[14.5px] leading-relaxed">
@@ -186,7 +189,7 @@ function Dashboard() {
             href="/cheatsheet"
             className="mt-5 inline-flex items-center gap-2 text-gold hover:gap-3 transition-all text-sm relative"
           >
-            Read all paths <span aria-hidden>→</span>
+            Read all paths <ArrowRight size={14} strokeWidth={2} aria-hidden />
           </Link>
         </article>
       </section>
@@ -205,7 +208,7 @@ function Dashboard() {
             href="/calendar"
             className="text-sm text-muted hover:text-text-strong transition flex items-center gap-1"
           >
-            View calendar <span aria-hidden>→</span>
+            View calendar <ArrowRight size={14} strokeWidth={2} aria-hidden />
           </Link>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3">

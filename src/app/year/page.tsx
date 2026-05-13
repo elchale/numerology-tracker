@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { ChevronLeft, ChevronRight, Crown, Sparkles } from "lucide-react";
 import { useConfig } from "@/store/useConfig";
 import { RequireConfig } from "@/components/RequireConfig";
 import { MonthMini } from "@/components/year/MonthMini";
@@ -57,7 +58,7 @@ function YearInner() {
           </div>
           <div className="flex items-center gap-2">
             <button onClick={() => setYear(year - 1)} className="btn btn-ghost" aria-label="Previous year">
-              ←
+              <ChevronLeft size={18} strokeWidth={2} aria-hidden />
             </button>
             <button
               onClick={() => setYear(today.getFullYear())}
@@ -66,7 +67,7 @@ function YearInner() {
               This year
             </button>
             <button onClick={() => setYear(year + 1)} className="btn btn-ghost" aria-label="Next year">
-              →
+              <ChevronRight size={18} strokeWidth={2} aria-hidden />
             </button>
           </div>
         </div>
@@ -119,12 +120,14 @@ function YearInner() {
           <div className="flex flex-wrap items-center gap-2 relative">
             {summary.isMasterYear && (
               <span className="chip" style={{ color: "var(--color-gold)" }}>
-                ★ Master year
+                <Sparkles size={12} strokeWidth={2.25} aria-hidden />
+                Master year
               </span>
             )}
             {summary.isLifePathYear && (
               <span className="chip" style={{ color: "var(--color-cyan)", borderColor: "#22d3ee55" }}>
-                ▲ Life Path year
+                <Crown size={12} strokeWidth={2.25} aria-hidden />
+                Life Path year
               </span>
             )}
             <span className="chip">{summary.peakCount} peak days</span>

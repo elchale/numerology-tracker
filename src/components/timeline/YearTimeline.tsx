@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { ChevronRight, Crown, Sparkles } from "lucide-react";
 import { lifePath, personalYear } from "@/lib/numerology";
 import { PERSONAL_YEAR_MEANINGS } from "@/lib/meanings";
 import type { BirthDate } from "@/lib/types";
@@ -107,7 +108,8 @@ export function YearTimeline({
                 </span>
                 {it.isMaster && (
                   <span className="chip" style={{ color: "var(--color-gold)" }}>
-                    ★ Master year
+                    <Sparkles size={12} strokeWidth={2.25} aria-hidden />
+                    Master year
                   </span>
                 )}
                 {it.isLifePath && !it.isMaster && (
@@ -115,7 +117,8 @@ export function YearTimeline({
                     className="chip"
                     style={{ color: "var(--color-cyan)", borderColor: "#22d3ee55" }}
                   >
-                    ▲ Life Path year
+                    <Crown size={12} strokeWidth={2.25} aria-hidden />
+                    Life Path year
                   </span>
                 )}
                 {it.isBirth && (
@@ -126,7 +129,12 @@ export function YearTimeline({
                 {meaning?.theme}
               </p>
             </div>
-            <span className="text-muted-2 text-lg leading-none hidden sm:inline">→</span>
+            <ChevronRight
+              size={18}
+              strokeWidth={2}
+              className="text-muted-2 hidden sm:inline-block"
+              aria-hidden
+            />
           </button>
         );
       })}

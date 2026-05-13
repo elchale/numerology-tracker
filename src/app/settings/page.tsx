@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ArrowRight } from "lucide-react";
 import { useConfig, useHydrated } from "@/store/useConfig";
 import { isValidBirthDate, lifePath, lifePathRaw } from "@/lib/numerology";
 import { LIFE_PATH_MEANINGS, KARMIC_MEANINGS } from "@/lib/meanings";
@@ -238,7 +239,7 @@ function SettingsForm({
               }
             >
               {initialBirth ? "Save changes" : "Begin"}
-              <span aria-hidden>→</span>
+              <ArrowRight size={16} strokeWidth={2} aria-hidden />
             </button>
             {initialBirth && (
               <button

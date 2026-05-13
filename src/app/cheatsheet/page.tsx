@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Crown, Sparkles } from "lucide-react";
 import { useConfig } from "@/store/useConfig";
 import {
   DAY_TYPE_META,
@@ -92,13 +93,13 @@ export default function CheatsheetPage() {
                   {n}
                 </span>
                 {isMaster && (
-                  <span
+                  <Sparkles
                     aria-hidden
-                    className="absolute top-1 right-1.5 text-[10px]"
+                    className="absolute top-1 right-1.5"
                     style={{ color: "var(--color-gold)" }}
-                  >
-                    ★
-                  </span>
+                    size={12}
+                    strokeWidth={2.25}
+                  />
                 )}
                 {userLP === n && (
                   <span
@@ -121,6 +122,7 @@ export default function CheatsheetPage() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {DAY_TYPES.map((t) => {
             const meta = DAY_TYPE_META[t];
+            const Icon = meta.icon;
             return (
               <div
                 key={t}
@@ -141,13 +143,12 @@ export default function CheatsheetPage() {
                   >
                     {meta.label}
                   </span>
-                  <span
-                    className="num-display text-3xl leading-none"
+                  <Icon
+                    size={26}
+                    strokeWidth={1.75}
                     style={{ color: meta.color }}
                     aria-hidden
-                  >
-                    {meta.emoji}
-                  </span>
+                  />
                 </div>
                 <p className="text-text/85 text-[14px] mt-2 leading-relaxed relative">
                   {meta.tone}
@@ -268,7 +269,8 @@ function NumberDetail({
           </h2>
           {isYours && (
             <span className="chip mt-2" style={{ color: "var(--color-cyan)", borderColor: "#22d3ee55" }}>
-              ▲ This is your Life Path
+              <Crown size={12} strokeWidth={2.25} aria-hidden />
+              This is your Life Path
             </span>
           )}
         </div>

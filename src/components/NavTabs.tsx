@@ -2,13 +2,21 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  BookOpen,
+  CalendarDays,
+  CalendarRange,
+  History,
+  Sun,
+  type LucideIcon,
+} from "lucide-react";
 
-const TABS: { href: string; label: string; glyph: string }[] = [
-  { href: "/", label: "Today", glyph: "◉" },
-  { href: "/calendar", label: "Month", glyph: "▦" },
-  { href: "/year", label: "Year", glyph: "◫" },
-  { href: "/timeline", label: "Timeline", glyph: "═" },
-  { href: "/cheatsheet", label: "Cheat sheet", glyph: "✦" },
+const TABS: { href: string; label: string; Icon: LucideIcon }[] = [
+  { href: "/", label: "Today", Icon: Sun },
+  { href: "/calendar", label: "Month", Icon: CalendarDays },
+  { href: "/year", label: "Year", Icon: CalendarRange },
+  { href: "/timeline", label: "Timeline", Icon: History },
+  { href: "/cheatsheet", label: "Cheat sheet", Icon: BookOpen },
 ];
 
 export function NavTabs() {
@@ -23,6 +31,7 @@ export function NavTabs() {
               tab.href === "/"
                 ? pathname === "/"
                 : pathname.startsWith(tab.href);
+            const Icon = tab.Icon;
             return (
               <Link
                 key={tab.href}
@@ -34,15 +43,12 @@ export function NavTabs() {
                     : "text-muted hover:text-text-strong",
                 ].join(" ")}
               >
-                <span
-                  className={[
-                    "text-base leading-none",
-                    active ? "text-gold" : "text-muted-2",
-                  ].join(" ")}
+                <Icon
+                  size={15}
+                  strokeWidth={2}
+                  className={active ? "text-gold" : "text-muted-2"}
                   aria-hidden
-                >
-                  {tab.glyph}
-                </span>
+                />
                 <span>{tab.label}</span>
                 {active && (
                   <span className="absolute left-2 right-2 -bottom-px h-px bg-gradient-to-r from-transparent via-gold to-transparent" />

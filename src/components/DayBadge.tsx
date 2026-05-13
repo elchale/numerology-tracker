@@ -8,7 +8,9 @@ interface Props {
 
 export function DayBadge({ type, size = "md" }: Props) {
   const meta = DAY_TYPE_META[type];
+  const Icon = meta.icon;
   const padding = size === "sm" ? "px-2 py-1 text-[10px]" : "px-3 py-1.5 text-xs";
+  const iconSize = size === "sm" ? 12 : 14;
 
   return (
     <span
@@ -22,9 +24,7 @@ export function DayBadge({ type, size = "md" }: Props) {
         color: meta.color,
       }}
     >
-      <span aria-hidden className="text-base leading-none">
-        {meta.emoji}
-      </span>
+      <Icon size={iconSize} strokeWidth={2} aria-hidden />
       {meta.label}
     </span>
   );

@@ -1,3 +1,19 @@
+import {
+  AlertTriangle,
+  Coins,
+  Crown,
+  Gem,
+  Hammer,
+  Heart,
+  Moon,
+  Music,
+  RotateCcw,
+  Sparkle,
+  Sparkles,
+  Sprout,
+  Waves,
+  type LucideIcon,
+} from "lucide-react";
 import type { DayType } from "./types";
 
 export interface NumberMeaning {
@@ -174,20 +190,23 @@ export const PERSONAL_YEAR_MEANINGS: Record<number, { title: string; theme: stri
   33: { title: "Master Year of Service", theme: "Teach, heal, devote.", focus: "Collective uplift" },
 };
 
-export const DAY_TYPE_META: Record<DayType, { label: string; tone: string; emoji: string; color: string }> = {
-  master11: { label: "Master 11", tone: "Visionary day. Trust your intuition.", emoji: "★", color: "#c084fc" },
-  master22: { label: "Master 22", tone: "Master Builder day. Lay big foundations.", emoji: "◆", color: "#fbbf24" },
-  master33: { label: "Master 33", tone: "Master Teacher day. Serve and heal.", emoji: "✦", color: "#f472b6" },
-  peak: { label: "Peak Day", tone: "Your Life Path activates today.", emoji: "▲", color: "#22d3ee" },
-  abundance: { label: "Abundance", tone: "Power & resources flow.", emoji: "$", color: "#eab308" },
-  flow: { label: "Flow", tone: "Movement, freedom, opportunity.", emoji: "~", color: "#06b6d4" },
-  newStart: { label: "New Start", tone: "Plant a seed. Begin.", emoji: "+", color: "#f97316" },
-  creative: { label: "Creative", tone: "Express, play, share.", emoji: "♪", color: "#fbbf24" },
-  harmony: { label: "Harmony", tone: "Connect, partner, soften.", emoji: "♡", color: "#ec4899" },
-  rest: { label: "Rest", tone: "Reflect, study, recharge.", emoji: "○", color: "#8b5cf6" },
-  release: { label: "Release", tone: "Complete and let go.", emoji: "↺", color: "#ef4444" },
-  karmic: { label: "Karmic Day", tone: "A lesson is on offer. Move with care.", emoji: "!", color: "#dc2626" },
-  neutral: { label: "Build", tone: "Steady, grounded work.", emoji: "□", color: "#94a3b8" },
+export const DAY_TYPE_META: Record<
+  DayType,
+  { label: string; tone: string; icon: LucideIcon; color: string }
+> = {
+  master11: { label: "Master 11", tone: "Visionary day. Trust your intuition.", icon: Sparkles, color: "#c084fc" },
+  master22: { label: "Master 22", tone: "Master Builder day. Lay big foundations.", icon: Gem, color: "#fbbf24" },
+  master33: { label: "Master 33", tone: "Master Teacher day. Serve and heal.", icon: Sparkle, color: "#f472b6" },
+  peak: { label: "Peak Day", tone: "Your Life Path activates today.", icon: Crown, color: "#22d3ee" },
+  abundance: { label: "Abundance", tone: "Power & resources flow.", icon: Coins, color: "#eab308" },
+  flow: { label: "Flow", tone: "Movement, freedom, opportunity.", icon: Waves, color: "#06b6d4" },
+  newStart: { label: "New Start", tone: "Plant a seed. Begin.", icon: Sprout, color: "#f97316" },
+  creative: { label: "Creative", tone: "Express, play, share.", icon: Music, color: "#fbbf24" },
+  harmony: { label: "Harmony", tone: "Connect, partner, soften.", icon: Heart, color: "#ec4899" },
+  rest: { label: "Rest", tone: "Reflect, study, recharge.", icon: Moon, color: "#8b5cf6" },
+  release: { label: "Release", tone: "Complete and let go.", icon: RotateCcw, color: "#ef4444" },
+  karmic: { label: "Karmic Day", tone: "A lesson is on offer. Move with care.", icon: AlertTriangle, color: "#dc2626" },
+  neutral: { label: "Build", tone: "Steady, grounded work.", icon: Hammer, color: "#94a3b8" },
 };
 
 export const KARMIC_MEANINGS: Record<13 | 14 | 16 | 19, { title: string; lesson: string }> = {

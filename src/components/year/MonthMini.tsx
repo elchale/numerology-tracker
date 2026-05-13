@@ -1,5 +1,6 @@
 "use client";
 
+import { AlertCircle, Crown, Sparkles } from "lucide-react";
 import { getDayInfo, personalMonth } from "@/lib/numerology";
 import type { BirthDate } from "@/lib/types";
 import { DAY_TYPE_META } from "@/lib/meanings";
@@ -91,17 +92,20 @@ export function MonthMini({ birth, year, month, onClick }: Props) {
       <div className="mt-3 flex items-center gap-2 flex-wrap text-[10px]">
         {masters > 0 && (
           <span className="chip" style={{ color: "var(--color-gold)" }}>
-            ★ {masters}
+            <Sparkles size={11} strokeWidth={2.25} aria-hidden />
+            {masters}
           </span>
         )}
         {peaks > 0 && (
           <span className="chip" style={{ color: "var(--color-cyan)" }}>
-            ▲ {peaks}
+            <Crown size={11} strokeWidth={2.25} aria-hidden />
+            {peaks}
           </span>
         )}
         {karmic > 0 && (
           <span className="chip" style={{ color: "var(--color-danger)" }}>
-            ! {karmic}
+            <AlertCircle size={11} strokeWidth={2.25} aria-hidden />
+            {karmic}
           </span>
         )}
         {masters === 0 && peaks === 0 && karmic === 0 && (
