@@ -32,17 +32,24 @@ export function reduce(n: number): number {
 }
 
 /**
- * Returns the pre-reduced number BEFORE the final reduction step.
- * Used to detect karmic numbers (13, 14, 16, 19).
+ * Reduces to a single digit (or master number) while scanning every
+ * intermediate value for a karmic-debt hit. Karmic debt applies whenever
+ * 13, 14, 16, or 19 appears ANYWHERE in the reduction chain — not just
+ * the last two-digit step. Example: 19 → 10 → 1 still carries karmic 19.
  */
-function reduceTrack(n: number): { final: number; preFinal: number } {
+type KarmicNumber = 13 | 14 | 16 | 19;
+
+function reduceTrack(n: number): { final: number; karmicHit?: KarmicNumber } {
   let value = Math.abs(n);
-  let prev = value;
+  let karmicHit: KarmicNumber | undefined;
+  if (KARMIC_NUMBERS.has(value)) karmicHit = value as KarmicNumber;
   while (value > 9 && !MASTER_NUMBERS.has(value)) {
-    prev = value;
     value = digitSum(value);
+    if (!karmicHit && KARMIC_NUMBERS.has(value)) {
+      karmicHit = value as KarmicNumber;
+    }
   }
-  return { final: value, preFinal: prev };
+  return { final: value, karmicHit };
 }
 
 export function lifePath(birth: BirthDate): number {
@@ -52,11 +59,18 @@ export function lifePath(birth: BirthDate): number {
   return reduce(d + m + y);
 }
 
-export function lifePathRaw(birth: BirthDate): { final: number; preFinal: number } {
+export function lifePathRaw(
+  birth: BirthDate,
+): { final: number; karmicHit?: KarmicNumber } {
   const d = reduce(birth.day);
   const m = reduce(birth.month);
   const y = reduce(birth.year);
-  return reduceTrack(d + m + y);
+  const sum = reduceTrack(d + m + y);
+  // Also surface a karmic hit on the birth day itself (e.g., born on the 13th).
+  if (!sum.karmicHit && KARMIC_NUMBERS.has(birth.day)) {
+    return { final: sum.final, karmicHit: birth.day as KarmicNumber };
+  }
+  return sum;
 }
 
 export function personalYear(birth: BirthDate, year: number): number {
@@ -85,19 +99,19 @@ function personalDayTrack(
   year: number,
   month: number,
   day: number,
-): { final: number; preFinal: number } {
+): { final: number; karmicHit?: KarmicNumber } {
   const base = personalMonth(birth, year, month) + reduce(day);
   return reduceTrack(base);
 }
 
 export function classifyDay(
   personalDayValue: number,
-  preFinal: number,
+  karmicHit: KarmicNumber | undefined,
   lifePathValue: number,
-): { type: DayType; isKarmic: boolean; karmicSource?: 13 | 14 | 16 | 19 } {
+): { type: DayType; isKarmic: boolean; karmicSource?: KarmicNumber } {
   const isMaster = MASTER_NUMBERS.has(personalDayValue);
-  const isKarmic = KARMIC_NUMBERS.has(preFinal);
-  const karmicSource = isKarmic ? (preFinal as 13 | 14 | 16 | 19) : undefined;
+  const isKarmic = karmicHit !== undefined;
+  const karmicSource = karmicHit;
 
   if (personalDayValue === 11) return { type: "master11", isKarmic, karmicSource };
   if (personalDayValue === 22) return { type: "master22", isKarmic, karmicSource };
@@ -141,9 +155,9 @@ export function getDayInfo(
 ): DayInfo {
   const py = personalYear(birth, year);
   const pm = personalMonth(birth, year, month);
-  const { final: pd, preFinal } = personalDayTrack(birth, year, month, day);
+  const { final: pd, karmicHit } = personalDayTrack(birth, year, month, day);
   const lp = lifePath(birth);
-  const cls = classifyDay(pd, preFinal, lp);
+  const cls = classifyDay(pd, karmicHit, lp);
 
   return {
     date: new Date(year, month - 1, day),

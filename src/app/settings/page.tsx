@@ -68,9 +68,7 @@ function SettingsForm({
     const lp = lifePath(candidate);
     const raw = lifePathRaw(candidate);
     const meaning = LIFE_PATH_MEANINGS[lp];
-    const karmic = [13, 14, 16, 19].includes(raw.preFinal)
-      ? KARMIC_MEANINGS[raw.preFinal as 13 | 14 | 16 | 19]
-      : null;
+    const karmic = raw.karmicHit ? KARMIC_MEANINGS[raw.karmicHit] : null;
     return { lp, meaning, karmic };
   }, [candidate]);
 
