@@ -5,7 +5,6 @@ import { Crown, X } from "lucide-react";
 import { getDayInfo, universalDay } from "@/lib/numerology";
 import {
   DAY_TYPE_META,
-  KARMIC_MEANINGS,
   LIFE_PATH_MEANINGS,
   PERSONAL_YEAR_MEANINGS,
   UNIVERSAL_MEANING,
@@ -148,14 +147,6 @@ function PanelBody({
           {meta.tone}
         </p>
       </div>
-
-      {info.isKarmic && info.karmicSource && (
-        <Block title={KARMIC_MEANINGS[info.karmicSource].title} tone="danger">
-          <p className="text-text/85 leading-relaxed text-[14.5px]">
-            {KARMIC_MEANINGS[info.karmicSource].lesson}
-          </p>
-        </Block>
-      )}
 
       {dayMeaning && (
         <Block title={`Day Number ${info.personalDay} — ${dayMeaning.title}`}>

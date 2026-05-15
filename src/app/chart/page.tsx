@@ -62,7 +62,7 @@ function Chart() {
     (p) => age >= p.fromAge && (p.toAge === null || age < p.toAge),
   );
   const currentTimedChallenge = chs.find(
-    (c) => !c.lifelong && age >= c.fromAge && (c.toAge === null || age < c.toAge),
+    (c) => age >= c.fromAge && (c.toAge === null || age < c.toAge),
   );
 
   return (
@@ -228,14 +228,13 @@ function Chart() {
         <div className="space-y-2">
           {chs.map((c) => {
             const active =
-              c.lifelong ||
-              (age >= c.fromAge && (c.toAge === null || age < c.toAge));
+              age >= c.fromAge && (c.toAge === null || age < c.toAge);
             return (
               <CycleRow
                 key={c.kind}
                 label={
                   c.kind === "main"
-                    ? "Main Challenge (lifelong)"
+                    ? "Main Challenge"
                     : c.kind === "first"
                       ? "First Challenge"
                       : c.kind === "second"
@@ -243,8 +242,8 @@ function Chart() {
                         : "Fourth Challenge"
                 }
                 number={c.number}
-                fromAge={c.lifelong ? null : c.fromAge}
-                toAge={c.lifelong ? null : c.toAge}
+                fromAge={c.fromAge}
+                toAge={c.toAge}
                 active={active}
                 description={CHALLENGE_MEANINGS[c.number] ?? ""}
                 tone="danger"

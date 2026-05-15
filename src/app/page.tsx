@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
-import { AlertCircle, ArrowRight, Crown } from "lucide-react";
+import { ArrowRight, Crown } from "lucide-react";
 import { useConfig } from "@/store/useConfig";
 import { RequireConfig } from "@/components/RequireConfig";
 import { NumberCard } from "@/components/NumberCard";
@@ -99,7 +99,7 @@ function Dashboard() {
         />
       </section>
 
-      {(info.isKarmic || info.lifePathAlignment || info.isMaster) && (
+      {(info.lifePathAlignment || info.isMaster) && (
         <section className="card p-5 sm:p-7 flex flex-wrap items-start gap-4">
           <DayBadge type={info.type} />
           {info.lifePathAlignment && !info.isMaster && (
@@ -111,21 +111,10 @@ function Dashboard() {
               Your Life Path activates today
             </span>
           )}
-          {info.isKarmic && (
-            <span
-              className="chip"
-              style={{ color: "var(--color-danger)", borderColor: "#dc262655" }}
-            >
-              <AlertCircle size={12} strokeWidth={2.25} aria-hidden />
-              Karmic lesson on offer
-            </span>
-          )}
           <p className="text-text/90 flex-1 min-w-[260px] text-[14.5px] leading-relaxed">
             {info.isMaster
               ? "You are inside a high-voltage day. Protect your nervous system and trust the signals."
-              : info.lifePathAlignment
-                ? "The frequency of your Life Path is dominant today — what you start now carries unusual weight."
-                : "An older lesson is asking for attention. Move slowly and respond honestly."}
+              : "The frequency of your Life Path is dominant today — what you start now carries unusual weight."}
           </p>
         </section>
       )}

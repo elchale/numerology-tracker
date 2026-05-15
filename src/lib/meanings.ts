@@ -1,5 +1,4 @@
 import {
-  AlertTriangle,
   Coins,
   Crown,
   Gem,
@@ -205,7 +204,6 @@ export const DAY_TYPE_META: Record<
   harmony: { label: "Harmony", tone: "Connect, partner, soften.", icon: Heart, color: "#ec4899" },
   rest: { label: "Rest", tone: "Reflect, study, recharge.", icon: Moon, color: "#8b5cf6" },
   release: { label: "Release", tone: "Complete and let go.", icon: RotateCcw, color: "#ef4444" },
-  karmic: { label: "Karmic Day", tone: "A lesson is on offer. Move with care.", icon: AlertTriangle, color: "#dc2626" },
   neutral: { label: "Build", tone: "Steady, grounded work.", icon: Hammer, color: "#94a3b8" },
 };
 

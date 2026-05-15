@@ -84,16 +84,16 @@ export function pinnacles(birth: BirthDate): [Pinnacle, Pinnacle, Pinnacle, Pinn
 
 /* -------------------------------- Challenges ------------------------------- */
 /**
- * Four Challenge numbers — opposite of Pinnacles. Master numbers are reduced
- * before subtraction (challenges are always 0-9, including 0). The Main
- * Challenge runs throughout life; the other three follow Pinnacle windows.
+ * Four Challenge numbers — the flip side of the Pinnacles, occupying the same
+ * four age periods one-to-one (First, Second, Main/Third, Fourth). Master
+ * numbers are reduced to single digits before subtraction, so every Challenge
+ * falls in 0-9 (including 0). The Main Challenge is the most influential.
  */
 export interface Challenge {
   kind: "first" | "second" | "main" | "fourth";
   number: number;
   fromAge: number;
   toAge: number | null;
-  lifelong: boolean;
 }
 
 export function challenges(birth: BirthDate): [Challenge, Challenge, Challenge, Challenge] {
@@ -111,10 +111,10 @@ export function challenges(birth: BirthDate): [Challenge, Challenge, Challenge, 
   const firstEnd = 36 - lpForAges;
 
   return [
-    { kind: "first", number: c1, fromAge: 0, toAge: firstEnd, lifelong: false },
-    { kind: "second", number: c2, fromAge: firstEnd, toAge: firstEnd + 9, lifelong: false },
-    { kind: "main", number: cMain, fromAge: 0, toAge: null, lifelong: true },
-    { kind: "fourth", number: c4, fromAge: firstEnd + 18, toAge: null, lifelong: false },
+    { kind: "first", number: c1, fromAge: 0, toAge: firstEnd },
+    { kind: "second", number: c2, fromAge: firstEnd, toAge: firstEnd + 9 },
+    { kind: "main", number: cMain, fromAge: firstEnd + 9, toAge: firstEnd + 18 },
+    { kind: "fourth", number: c4, fromAge: firstEnd + 18, toAge: null },
   ];
 }
 
@@ -129,14 +129,35 @@ const PYTHAGOREAN: Record<string, number> = {
   S: 1, T: 2, U: 3, V: 4, W: 5, X: 6, Y: 7, Z: 8,
 };
 
-const VOWELS = new Set(["A", "E", "I", "O", "U"]);
+/** A, E, I, O, U are always vowels. Y is decided contextually (see below). */
+const HARD_VOWELS = new Set(["A", "E", "I", "O", "U"]);
 
-function normalizeName(name: string): string {
-  return name
+/** Strip diacritics, uppercase, keep A-Z only. */
+function cleanToken(token: string): string {
+  return token
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
     .toUpperCase()
     .replace(/[^A-Z]/g, "");
+}
+
+/**
+ * Whether the letter at `index` of a cleaned name part counts as a vowel for
+ * the Soul Urge / Personality split. A, E, I, O, U always do. Y is contextual:
+ * it acts as a vowel when it carries the vowel sound of its syllable —
+ * practically, when neither neighbouring letter is a hard vowel (Lynn,
+ * Yvonne, Bryn, Carolyn, Mary). Beside a hard vowel it is the consonant
+ * glide (Yolanda, Maya).
+ */
+function isVowelAt(part: string, index: number): boolean {
+  const ch = part[index];
+  if (HARD_VOWELS.has(ch)) return true;
+  if (ch !== "Y") return false;
+  const prev = part[index - 1];
+  const next = part[index + 1];
+  const prevIsVowel = prev !== undefined && HARD_VOWELS.has(prev);
+  const nextIsVowel = next !== undefined && HARD_VOWELS.has(next);
+  return !prevIsVowel && !nextIsVowel;
 }
 
 export interface NameNumbers {
@@ -150,33 +171,48 @@ export interface NameNumbers {
  * Compute Expression, Soul Urge, and Personality from a full birth name.
  * Returns null if the name contains no usable letters.
  *
- * - Expression: sum of every letter's value (preserves master).
- * - Soul Urge: sum of vowels only.
- * - Personality: sum of consonants only.
+ * - Expression: every letter's value.
+ * - Soul Urge: vowels only.
+ * - Personality: consonants only.
  *
- * Pythagorean convention: Y is treated as a consonant by default. Diacritics
- * are stripped, non-letters ignored. Master numbers are preserved.
+ * Decoz method: each name part (first, middle, last) is summed and reduced
+ * ON ITS OWN — preserving master numbers per part — then the reduced parts
+ * are added and reduced. This differs from summing every letter at once
+ * whenever a part lands on a master number. Y is classified contextually.
  */
 export function nameNumbers(fullName: string): NameNumbers | null {
-  const cleaned = normalizeName(fullName);
-  if (cleaned.length === 0) return null;
+  const parts = fullName
+    .split(/\s+/)
+    .map(cleanToken)
+    .filter((p) => p.length > 0);
+  if (parts.length === 0) return null;
 
-  let exprSum = 0;
-  let vowelSum = 0;
-  let consonantSum = 0;
-  for (const ch of cleaned) {
-    const v = PYTHAGOREAN[ch];
-    if (v === undefined) continue;
-    exprSum += v;
-    if (VOWELS.has(ch)) vowelSum += v;
-    else consonantSum += v;
+  let exprTotal = 0;
+  let vowelTotal = 0;
+  let consonantTotal = 0;
+  let letterCount = 0;
+
+  for (const part of parts) {
+    let expr = 0;
+    let vowels = 0;
+    let consonants = 0;
+    for (let i = 0; i < part.length; i += 1) {
+      const value = PYTHAGOREAN[part[i]];
+      expr += value;
+      if (isVowelAt(part, i)) vowels += value;
+      else consonants += value;
+    }
+    exprTotal += reduce(expr);
+    vowelTotal += reduce(vowels);
+    consonantTotal += reduce(consonants);
+    letterCount += part.length;
   }
 
   return {
-    expression: reduce(exprSum),
-    soulUrge: reduce(vowelSum),
-    personality: reduce(consonantSum),
-    letterCount: cleaned.length,
+    expression: reduce(exprTotal),
+    soulUrge: reduce(vowelTotal),
+    personality: reduce(consonantTotal),
+    letterCount,
   };
 }
 

@@ -32,6 +32,19 @@ export function reduce(n: number): number {
 }
 
 /**
+ * Reduces fully to a single digit — master numbers are NOT preserved.
+ * Used for universal/global cycle numbers, which are not a personal-chart
+ * concept and so do not carry master vibrations.
+ */
+function reduceToSingle(n: number): number {
+  let value = Math.abs(n);
+  while (value > 9) {
+    value = digitSum(value);
+  }
+  return value;
+}
+
+/**
  * Reduces to a single digit (or master number) while scanning every
  * intermediate value for a karmic-debt hit. Karmic debt applies whenever
  * 13, 14, 16, or 19 appears ANYWHERE in the reduction chain — not just
@@ -59,18 +72,19 @@ export function lifePath(birth: BirthDate): number {
   return reduce(d + m + y);
 }
 
+/**
+ * Life Path with karmic-debt tracking. Karmic debt belongs to the Life Path
+ * only when its OWN calculation total (the summed reduced components) is
+ * 13/14/16/19. A karmic birth day (born on the 13th, etc.) produces a karmic
+ * Birthday Number — a separate core number — and is surfaced there, not here.
+ */
 export function lifePathRaw(
   birth: BirthDate,
 ): { final: number; karmicHit?: KarmicNumber } {
   const d = reduce(birth.day);
   const m = reduce(birth.month);
   const y = reduce(birth.year);
-  const sum = reduceTrack(d + m + y);
-  // Also surface a karmic hit on the birth day itself (e.g., born on the 13th).
-  if (!sum.karmicHit && KARMIC_NUMBERS.has(birth.day)) {
-    return { final: sum.final, karmicHit: birth.day as KarmicNumber };
-  }
-  return sum;
+  return reduceTrack(d + m + y);
 }
 
 export function personalYear(birth: BirthDate, year: number): number {
@@ -94,56 +108,43 @@ export function personalDay(
   return reduce(personalMonth(birth, year, month) + reduce(day));
 }
 
-function personalDayTrack(
-  birth: BirthDate,
-  year: number,
-  month: number,
-  day: number,
-): { final: number; karmicHit?: KarmicNumber } {
-  const base = personalMonth(birth, year, month) + reduce(day);
-  return reduceTrack(base);
-}
-
+/**
+ * Classifies a Personal Day by its number. Karmic debt is deliberately NOT a
+ * day type: karmic-debt numbers are a property of the natal core numbers
+ * (Life Path, Expression, Soul Urge, Personality, Birthday), not of transient
+ * cycles like the Personal Day.
+ */
 export function classifyDay(
   personalDayValue: number,
-  karmicHit: KarmicNumber | undefined,
   lifePathValue: number,
-): { type: DayType; isKarmic: boolean; karmicSource?: KarmicNumber } {
-  const isMaster = MASTER_NUMBERS.has(personalDayValue);
-  const isKarmic = karmicHit !== undefined;
-  const karmicSource = karmicHit;
+): DayType {
+  if (personalDayValue === 11) return "master11";
+  if (personalDayValue === 22) return "master22";
+  if (personalDayValue === 33) return "master33";
 
-  if (personalDayValue === 11) return { type: "master11", isKarmic, karmicSource };
-  if (personalDayValue === 22) return { type: "master22", isKarmic, karmicSource };
-  if (personalDayValue === 33) return { type: "master33", isKarmic, karmicSource };
-
-  if (isKarmic) return { type: "karmic", isKarmic, karmicSource };
-
-  if (!isMaster && personalDayValue === lifePathValue) {
-    return { type: "peak", isKarmic, karmicSource };
-  }
+  if (personalDayValue === lifePathValue) return "peak";
 
   switch (personalDayValue) {
     case 1:
-      return { type: "newStart", isKarmic, karmicSource };
+      return "newStart";
     case 2:
-      return { type: "harmony", isKarmic, karmicSource };
+      return "harmony";
     case 3:
-      return { type: "creative", isKarmic, karmicSource };
+      return "creative";
     case 4:
-      return { type: "neutral", isKarmic, karmicSource };
+      return "neutral";
     case 5:
-      return { type: "flow", isKarmic, karmicSource };
+      return "flow";
     case 6:
-      return { type: "harmony", isKarmic, karmicSource };
+      return "harmony";
     case 7:
-      return { type: "rest", isKarmic, karmicSource };
+      return "rest";
     case 8:
-      return { type: "abundance", isKarmic, karmicSource };
+      return "abundance";
     case 9:
-      return { type: "release", isKarmic, karmicSource };
+      return "release";
     default:
-      return { type: "neutral", isKarmic, karmicSource };
+      return "neutral";
   }
 }
 
@@ -155,19 +156,16 @@ export function getDayInfo(
 ): DayInfo {
   const py = personalYear(birth, year);
   const pm = personalMonth(birth, year, month);
-  const { final: pd, karmicHit } = personalDayTrack(birth, year, month, day);
+  const pd = personalDay(birth, year, month, day);
   const lp = lifePath(birth);
-  const cls = classifyDay(pd, karmicHit, lp);
 
   return {
     date: new Date(year, month - 1, day),
     personalYear: py,
     personalMonth: pm,
     personalDay: pd,
-    type: cls.type,
+    type: classifyDay(pd, lp),
     isMaster: MASTER_NUMBERS.has(pd),
-    isKarmic: cls.isKarmic,
-    karmicSource: cls.karmicSource,
     lifePathAlignment: pd === lp,
   };
 }
@@ -196,7 +194,7 @@ export function getNextLuckyDays(
       info.personalDay === 3 ||
       info.personalDay === 8;
 
-    if (isLucky && !info.isKarmic) {
+    if (isLucky) {
       const reason =
         info.isMaster
           ? `Master ${info.personalDay} energy`
@@ -233,16 +231,14 @@ export function getMonthSummary(
   const total = daysInMonth(year, month);
   const peakDays: number[] = [];
   const masterDays: number[] = [];
-  const karmicDays: number[] = [];
 
   for (let d = 1; d <= total; d += 1) {
     const info = getDayInfo(birth, year, month, d);
     if (info.lifePathAlignment && !info.isMaster) peakDays.push(d);
     if (info.isMaster) masterDays.push(d);
-    if (info.isKarmic) karmicDays.push(d);
   }
 
-  return { year, month, personalMonth: pm, peakDays, masterDays, karmicDays };
+  return { year, month, personalMonth: pm, peakDays, masterDays };
 }
 
 export function getYearSummary(birth: BirthDate, year: number): YearSummary {
@@ -272,9 +268,13 @@ export function getYearSummary(birth: BirthDate, year: number): YearSummary {
 
 /**
  * Universal day number — independent of birth, for shared/global energy.
+ * Universal cycles reduce fully to a single digit; master numbers are a
+ * personal-chart concept and are not preserved here.
  */
 export function universalDay(year: number, month: number, day: number): number {
-  return reduce(reduce(year) + reduce(month) + reduce(day));
+  return reduceToSingle(
+    reduceToSingle(year) + reduceToSingle(month) + reduceToSingle(day),
+  );
 }
 
 /**

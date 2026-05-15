@@ -64,7 +64,7 @@ All routes are statically prerendered, so the entire site serves from the edge C
 
 - **Numerology engine** (`src/lib/numerology.ts`) is pure and deterministic. Every page derives data from `birth` + a target date — no caching layer needed.
 - **Master numbers** (11, 22, 33) are preserved through reduction.
-- **Karmic numbers** (13, 14, 16, 19) are detected from the pre-final reduction step (see `reduceTrack`).
+- **Karmic numbers** (13, 14, 16, 19) are detected by scanning the whole reduction chain (see `reduceTrack`). Karmic debt is a property of core natal numbers only — the Life Path (when its own total is karmic) and the Birthday Number — not of transient cycles like the Personal Day.
 - **State** lives in one Zustand store (`src/store/useConfig.ts`). Hydration is gated through `useHydrated()` using `useSyncExternalStore`, so SSR and client paint stay consistent.
 - **The day-detail modal** renders through `createPortal` directly to `document.body` so it escapes any parent stacking context.
 - **Design tokens** (colors, fonts, shadows) live in the `@theme` block in `src/app/globals.css` — change once, propagate everywhere.

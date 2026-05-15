@@ -33,7 +33,6 @@ const DAY_TYPES: DayType[] = [
   "rest",
   "abundance",
   "release",
-  "karmic",
 ];
 
 export default function CheatsheetPage() {

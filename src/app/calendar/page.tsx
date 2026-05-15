@@ -2,13 +2,7 @@
 
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  AlertCircle,
-  ChevronLeft,
-  ChevronRight,
-  Crown,
-  Sparkles,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Crown, Sparkles } from "lucide-react";
 import { useConfig } from "@/store/useConfig";
 import { RequireConfig } from "@/components/RequireConfig";
 import { MonthView } from "@/components/calendar/MonthView";
@@ -150,7 +144,7 @@ function CalendarInner() {
               <span className="num-display text-gold text-lg ml-1">{pm}</span>
             </span>
             <span className="text-muted-2">·</span>
-            <span>{summary.masterDays.length} master · {summary.peakDays.length} peak · {summary.karmicDays.length} karmic</span>
+            <span>{summary.masterDays.length} master · {summary.peakDays.length} peak</span>
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -177,7 +171,6 @@ function CalendarInner() {
       <div className="mb-3 flex flex-wrap items-center gap-3 text-[11px] text-muted-2">
         <Legend color="var(--color-gold)" label="Master" Icon={Sparkles} />
         <Legend color="var(--color-cyan)" label="Life Path peak" Icon={Crown} />
-        <Legend color="var(--color-danger)" label="Karmic" Icon={AlertCircle} />
         <span className="text-muted-2 hidden sm:inline ml-auto">
           Arrow keys to change month · T for today · Esc to close
         </span>

@@ -18,7 +18,6 @@ export type DayType =
   | "harmony"
   | "rest"
   | "release"
-  | "karmic"
   | "neutral";
 
 export interface DayInfo {
@@ -28,8 +27,6 @@ export interface DayInfo {
   personalDay: number;
   type: DayType;
   isMaster: boolean;
-  isKarmic: boolean;
-  karmicSource?: 13 | 14 | 16 | 19;
   lifePathAlignment: boolean;
 }
 
@@ -46,7 +43,6 @@ export interface MonthSummary {
   personalMonth: number;
   peakDays: number[];
   masterDays: number[];
-  karmicDays: number[];
 }
 
 export interface YearSummary {

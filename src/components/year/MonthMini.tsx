@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, Crown, Sparkles } from "lucide-react";
+import { Crown, Sparkles } from "lucide-react";
 import { getDayInfo, personalMonth } from "@/lib/numerology";
 import type { BirthDate } from "@/lib/types";
 import { DAY_TYPE_META } from "@/lib/meanings";
@@ -25,7 +25,6 @@ export function MonthMini({ birth, year, month, onClick }: Props) {
 
   let masters = 0;
   let peaks = 0;
-  let karmic = 0;
 
   const cells: Array<{
     day: number;
@@ -37,10 +36,9 @@ export function MonthMini({ birth, year, month, onClick }: Props) {
   for (let d = 1; d <= daysInMonth; d += 1) {
     const info = getDayInfo(birth, year, month, d);
     const meta = DAY_TYPE_META[info.type];
-    const special = info.isMaster || info.lifePathAlignment || info.isKarmic;
+    const special = info.isMaster || info.lifePathAlignment;
     if (info.isMaster) masters += 1;
     if (info.lifePathAlignment && !info.isMaster) peaks += 1;
-    if (info.isKarmic) karmic += 1;
     cells.push({
       day: d,
       color: meta.color,
@@ -102,13 +100,7 @@ export function MonthMini({ birth, year, month, onClick }: Props) {
             {peaks}
           </span>
         )}
-        {karmic > 0 && (
-          <span className="chip" style={{ color: "var(--color-danger)" }}>
-            <AlertCircle size={11} strokeWidth={2.25} aria-hidden />
-            {karmic}
-          </span>
-        )}
-        {masters === 0 && peaks === 0 && karmic === 0 && (
+        {masters === 0 && peaks === 0 && (
           <span className="text-muted-2">Steady month</span>
         )}
       </div>

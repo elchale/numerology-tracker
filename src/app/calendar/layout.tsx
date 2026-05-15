@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Calendar",
   description:
-    "Monthly numerology calendar — see your personal day for every date, with master days, peak days, and karmic days highlighted.",
+    "Monthly numerology calendar — see your personal day for every date, with master days and Life Path peak days highlighted.",
 };
 
 export default function CalendarLayout({

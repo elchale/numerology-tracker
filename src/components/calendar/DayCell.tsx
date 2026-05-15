@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { DAY_TYPE_META } from "@/lib/meanings";
 import type { DayInfo } from "@/lib/types";
 
@@ -27,8 +27,7 @@ export function DayCell({
     );
   }
   const meta = DAY_TYPE_META[info.type];
-  const isSpecial =
-    info.isMaster || info.lifePathAlignment || info.isKarmic;
+  const isSpecial = info.isMaster || info.lifePathAlignment;
 
   return (
     <button
@@ -78,15 +77,6 @@ export function DayCell({
           strokeWidth={2.25}
         />
       )}
-      {info.isKarmic && !info.isMaster && !info.lifePathAlignment && (
-        <AlertCircle
-          aria-hidden
-          className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 text-danger"
-          size={10}
-          strokeWidth={2.25}
-        />
-      )}
-
       <span
         className="absolute inset-0 flex items-center justify-center num-display text-lg sm:text-3xl"
         style={{
