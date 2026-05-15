@@ -17,6 +17,7 @@ export default function SettingsPage() {
   const hydrated = useHydrated();
   const birth = useConfig((s) => s.birth);
   const name = useConfig((s) => s.name);
+  const fullName = useConfig((s) => s.fullName);
 
   if (!hydrated) return null;
 
@@ -25,6 +26,7 @@ export default function SettingsPage() {
       key={birth ? `${birth.day}-${birth.month}-${birth.year}` : "empty"}
       initialBirth={birth}
       initialName={name}
+      initialFullName={fullName}
     />
   );
 }
@@ -32,16 +34,20 @@ export default function SettingsPage() {
 function SettingsForm({
   initialBirth,
   initialName,
+  initialFullName,
 }: {
   initialBirth: BirthDate | null;
   initialName: string;
+  initialFullName: string;
 }) {
   const router = useRouter();
   const setBirth = useConfig((s) => s.setBirth);
   const setName = useConfig((s) => s.setName);
+  const setFullName = useConfig((s) => s.setFullName);
   const reset = useConfig((s) => s.reset);
 
   const [formName, setFormName] = useState(initialName);
+  const [formFullName, setFormFullName] = useState(initialFullName);
   const [day, setDay] = useState(initialBirth ? String(initialBirth.day) : "");
   const [month, setMonth] = useState(initialBirth ? String(initialBirth.month) : "");
   const [year, setYear] = useState(initialBirth ? String(initialBirth.year) : "");
@@ -78,6 +84,7 @@ function SettingsForm({
     setTouched(true);
     if (!candidate) return;
     setName(formName.trim());
+    setFullName(formFullName.trim());
     setBirth(candidate);
     router.push("/");
   };
@@ -86,6 +93,7 @@ function SettingsForm({
     if (confirm("Clear birth date and name from this device?")) {
       reset();
       setFormName("");
+      setFormFullName("");
       setDay("");
       setMonth("");
       setYear("");
@@ -128,6 +136,31 @@ function SettingsForm({
               autoComplete="off"
               maxLength={40}
             />
+          </div>
+
+          <div>
+            <label
+              htmlFor="fullName"
+              className="block text-[11px] uppercase tracking-[0.22em] text-muted-2 mb-2"
+            >
+              Full birth name{" "}
+              <span className="text-muted-2 normal-case tracking-normal">
+                (optional)
+              </span>
+            </label>
+            <input
+              id="fullName"
+              className="field"
+              value={formFullName}
+              onChange={(e) => setFormFullName(e.target.value)}
+              placeholder="First Middle Last — as on your birth certificate"
+              autoComplete="off"
+              maxLength={120}
+            />
+            <p className="text-xs text-muted-2 mt-2">
+              Used for Expression, Soul Urge, Personality, and Maturity numbers.
+              Use the name on your birth certificate for accuracy.
+            </p>
           </div>
 
           <div>

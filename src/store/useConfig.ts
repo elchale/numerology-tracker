@@ -8,9 +8,11 @@ import type { BirthDate } from "@/lib/types";
 interface ConfigState {
   birth: BirthDate | null;
   name: string;
+  fullName: string;
   theme: "light" | "dark" | "system";
   setBirth: (birth: BirthDate) => void;
   setName: (name: string) => void;
+  setFullName: (fullName: string) => void;
   setTheme: (theme: "light" | "dark" | "system") => void;
   reset: () => void;
 }
@@ -20,11 +22,13 @@ export const useConfig = create<ConfigState>()(
     (set) => ({
       birth: null,
       name: "",
+      fullName: "",
       theme: "system",
       setBirth: (birth) => set({ birth }),
       setName: (name) => set({ name }),
+      setFullName: (fullName) => set({ fullName }),
       setTheme: (theme) => set({ theme }),
-      reset: () => set({ birth: null, name: "" }),
+      reset: () => set({ birth: null, name: "", fullName: "" }),
     }),
     {
       name: "numerology-config",
@@ -32,6 +36,7 @@ export const useConfig = create<ConfigState>()(
       partialize: (state) => ({
         birth: state.birth,
         name: state.name,
+        fullName: state.fullName,
         theme: state.theme,
       }),
     },

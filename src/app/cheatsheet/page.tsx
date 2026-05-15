@@ -4,12 +4,15 @@ import { useMemo, useState } from "react";
 import { Crown, Sparkles } from "lucide-react";
 import { useConfig } from "@/store/useConfig";
 import {
+  COMPATIBILITY,
   DAY_TYPE_META,
   KARMIC_MEANINGS,
   LIFE_PATH_MEANINGS,
   PERSONAL_YEAR_MEANINGS,
+  UNIVERSAL_MEANING,
 } from "@/lib/meanings";
 import { lifePath } from "@/lib/numerology";
+import { lifePathFromDate } from "@/lib/secondary";
 import type { NumberMeaning } from "@/lib/meanings";
 import type { DayType } from "@/lib/types";
 
@@ -235,7 +238,155 @@ export default function CheatsheetPage() {
           })}
         </div>
       </section>
+
+      <UniversalLookup onPick={setSelected} userLP={userLP} />
     </div>
+  );
+}
+
+function UniversalLookup({
+  onPick,
+  userLP,
+}: {
+  onPick: (n: number) => void;
+  userLP: number | null;
+}) {
+  const today = useMemo(() => new Date(), []);
+  const [yearStr, setYearStr] = useState(String(today.getFullYear()));
+  const [monthStr, setMonthStr] = useState(String(today.getMonth() + 1));
+  const [dayStr, setDayStr] = useState(String(today.getDate()));
+
+  const parsed = useMemo(() => {
+    const y = parseInt(yearStr, 10);
+    const m = parseInt(monthStr, 10);
+    const d = parseInt(dayStr, 10);
+    if (
+      Number.isNaN(y) ||
+      Number.isNaN(m) ||
+      Number.isNaN(d) ||
+      m < 1 ||
+      m > 12 ||
+      d < 1 ||
+      d > new Date(y, m, 0).getDate() ||
+      y < 1900 ||
+      y > 2200
+    ) {
+      return null;
+    }
+    return { y, m, d };
+  }, [yearStr, monthStr, dayStr]);
+
+  const lp = parsed ? lifePathFromDate(parsed.y, parsed.m, parsed.d) : null;
+  const isYou = lp !== null && userLP !== null && lp === userLP;
+
+  return (
+    <section className="mb-4" aria-label="Universal birth-date lookup">
+      <p className="text-[11px] uppercase tracking-[0.22em] text-muted-2 mb-3">
+        On this day — universal lookup
+      </p>
+      <p className="text-text/85 max-w-2xl text-[15px] mb-4">
+        Curious what Life Path someone born today (or any other date) would
+        carry? Pick a date — defaults to today.
+      </p>
+      <div className="card p-5 sm:p-7 grid lg:grid-cols-[auto_1fr] gap-6 items-center">
+        <div>
+          <div className="grid grid-cols-[80px_80px_100px] gap-2 mb-2">
+            <input
+              aria-label="Day"
+              className="field text-center"
+              inputMode="numeric"
+              placeholder="DD"
+              value={dayStr}
+              onChange={(e) =>
+                setDayStr(e.target.value.replace(/\D/g, "").slice(0, 2))
+              }
+              maxLength={2}
+            />
+            <input
+              aria-label="Month"
+              className="field text-center"
+              inputMode="numeric"
+              placeholder="MM"
+              value={monthStr}
+              onChange={(e) =>
+                setMonthStr(e.target.value.replace(/\D/g, "").slice(0, 2))
+              }
+              maxLength={2}
+            />
+            <input
+              aria-label="Year"
+              className="field text-center"
+              inputMode="numeric"
+              placeholder="YYYY"
+              value={yearStr}
+              onChange={(e) =>
+                setYearStr(e.target.value.replace(/\D/g, "").slice(0, 4))
+              }
+              maxLength={4}
+            />
+          </div>
+          <p className="text-[11px] text-muted-2">
+            Day · Month · Year
+          </p>
+        </div>
+        <div className="border-l-0 lg:border-l border-line-soft pl-0 lg:pl-6 min-h-[80px] flex items-center">
+          {lp === null ? (
+            <p className="text-muted text-sm">
+              Enter a valid date to see the Life Path.
+            </p>
+          ) : (
+            <div>
+              <div className="flex items-end gap-4 flex-wrap">
+                <span
+                  className="num-display text-6xl sm:text-7xl leading-none"
+                  style={{
+                    color: [11, 22, 33].includes(lp)
+                      ? "var(--color-gold)"
+                      : isYou
+                        ? "var(--color-cyan)"
+                        : "var(--color-text-strong)",
+                  }}
+                >
+                  {lp}
+                </span>
+                <div className="pb-2">
+                  <p className="text-[10px] uppercase tracking-[0.22em] text-muted-2">
+                    Life Path
+                  </p>
+                  <p className="display text-xl text-text-strong leading-tight">
+                    {LIFE_PATH_MEANINGS[lp]?.title}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => onPick(lp)}
+                  className="btn btn-ghost text-sm ml-auto"
+                  aria-label="Open this number in the cheat sheet"
+                >
+                  Open this number
+                </button>
+              </div>
+              <p className="text-text/85 text-[14px] mt-3 leading-relaxed line-clamp-2">
+                {LIFE_PATH_MEANINGS[lp]?.essence}
+              </p>
+              {isYou && (
+                <span className="chip mt-2 inline-flex" style={{ color: "var(--color-cyan)", borderColor: "#22d3ee55" }}>
+                  Matches your own Life Path
+                </span>
+              )}
+              {parsed && (
+                <p className="text-[11px] text-muted-2 mt-2">
+                  Universal vibe for this date:{" "}
+                  <span className="text-text/80">
+                    {UNIVERSAL_MEANING[lp] ?? "shared collective energy"}
+                  </span>
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -286,7 +437,71 @@ function NumberDetail({
         <Bucket label="Do on a #-day" items={meaning.doToday} color={meaning.color} />
         <Bucket label="Avoid on a #-day" items={meaning.avoidToday} color="var(--color-muted)" />
       </div>
+
+      <CompatibilityBlock number={meaning.number} />
     </article>
+  );
+}
+
+function CompatibilityBlock({ number }: { number: number }) {
+  // Master numbers compatibility folds to their root (11 → 2, 22 → 4, 33 → 6).
+  const root = number === 11 ? 2 : number === 22 ? 4 : number === 33 ? 6 : number;
+  const entry = COMPATIBILITY[root];
+  if (!entry) return null;
+  return (
+    <div className="relative mt-7 pt-6 border-t border-line-soft">
+      <p className="text-[10px] uppercase tracking-[0.22em] text-muted-2 mb-3">
+        Compatibility
+        {root !== number && (
+          <span className="ml-2 text-muted-2 normal-case tracking-normal">
+            (uses root {root})
+          </span>
+        )}
+      </p>
+      <div className="grid sm:grid-cols-2 gap-5">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.18em] text-muted-2 mb-2">
+            Strong allies
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {entry.allies.map((n) => (
+              <span
+                key={n}
+                className="chip"
+                style={{
+                  color: "var(--color-emerald)",
+                  borderColor: "rgba(110, 231, 183, 0.4)",
+                }}
+              >
+                {n}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.18em] text-muted-2 mb-2">
+            Real friction
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {entry.friction.map((n) => (
+              <span
+                key={n}
+                className="chip"
+                style={{
+                  color: "var(--color-danger)",
+                  borderColor: "rgba(248, 113, 113, 0.35)",
+                }}
+              >
+                {n}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+      <p className="text-text/85 text-[14px] mt-4 leading-relaxed">
+        {entry.note}
+      </p>
+    </div>
   );
 }
 

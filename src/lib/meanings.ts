@@ -230,3 +230,183 @@ export const UNIVERSAL_MEANING: Record<number, string> = {
   22: "Universal master day — build big.",
   33: "Universal master day — teach and heal.",
 };
+
+/* ----------------------------- Compatibility ------------------------------ */
+/**
+ * Life-Path compatibility per Numerology.com's reference card, smoothed to
+ * keep symmetry where the sources disagree. Allies are strong natural fits;
+ * friction means active opposition (not "doomed" — just real work).
+ * Master numbers reduce to their root for compatibility purposes.
+ */
+export interface CompatibilityEntry {
+  allies: number[];
+  friction: number[];
+  note: string;
+}
+
+export const COMPATIBILITY: Record<number, CompatibilityEntry> = {
+  1: { allies: [3, 5, 6], friction: [1, 8, 9], note: "Needs space to lead. Pairs best with partners who admire drive without competing for it." },
+  2: { allies: [4, 6, 8], friction: [3, 5], note: "Cooperative and tender. Thrives with grounded providers; bruises under restless or aloof partners." },
+  3: { allies: [1, 5, 9], friction: [2, 4, 8], note: "Joyful communicator. Vibrates with adventure types; sensitive 2s and rigid 4s grind." },
+  4: { allies: [2, 7, 8], friction: [3, 5, 9], note: "Builder of structure. Bonds with the steady and the deep; chaos types feel threatening." },
+  5: { allies: [1, 3, 7], friction: [2, 4, 9], note: "Freedom-first. Needs partners who can ride the wave or wander beside it." },
+  6: { allies: [1, 2, 8, 9], friction: [3, 7], note: "Devoted nurturer. Almost universally caring, but flighty 3s and isolated 7s strain it." },
+  7: { allies: [4, 5, 7], friction: [6, 8, 9], note: "Introspective seeker. Best with depth or solitude; nurturers and tycoons drain it." },
+  8: { allies: [2, 4, 6], friction: [1, 3, 5, 7, 9], note: "Power-driven. Needs partners who orbit the ambition, not duel with it." },
+  9: { allies: [3, 6, 9], friction: [1, 4, 5, 7, 8], note: "Old soul, big heart. Resonates with other-givers; needs partners patient with its melancholy." },
+};
+
+/* -------------------------- Birthday Number (1-31) ------------------------- */
+/**
+ * Birthday Number — the unreduced day-of-month of birth. Carries a flavour
+ * even when it reduces to the same single digit as another date.
+ */
+export const BIRTHDAY_NUMBER_MEANINGS: Record<number, { title: string; blurb: string }> = {
+  1: { title: "The Independent", blurb: "Self-starter. You see openings others miss and move first." },
+  2: { title: "The Diplomat", blurb: "Sensitive and cooperative. You read rooms with uncomfortable accuracy." },
+  3: { title: "The Performer", blurb: "Expressive and witty. Words and creativity come fast." },
+  4: { title: "The Builder", blurb: "Reliable, methodical, allergic to shortcuts." },
+  5: { title: "The Adventurer", blurb: "Restless, curious, magnetic — change is your oxygen." },
+  6: { title: "The Caregiver", blurb: "Family-and-home centred. You love hard and protect harder." },
+  7: { title: "The Seeker", blurb: "Introspective, analytical, drawn to anything mysterious." },
+  8: { title: "The Executive", blurb: "Born for authority, money, and the long climb." },
+  9: { title: "The Humanitarian", blurb: "Wide-hearted and idealistic. You care about the whole." },
+  10: { title: "Pioneer (10/1)", blurb: "A 1 with extra individuality — leadership with a creative twist." },
+  11: { title: "Master 11", blurb: "Intuitive, visionary, high-voltage nervous system." },
+  12: { title: "Creative communicator (12/3)", blurb: "A 3 with disciplined structure underneath the wit." },
+  13: { title: "Karmic 13 → 4", blurb: "A builder with debt: laziness or shortcuts must be unlearned." },
+  14: { title: "Karmic 14 → 5", blurb: "Freedom haunted by past excess. Practise moderation." },
+  15: { title: "Magnetic charmer (15/6)", blurb: "A 6 with allure — beware seduction overriding values." },
+  16: { title: "Karmic 16 → 7", blurb: "Spiritual rebirth via humbling. Ego must be dismantled." },
+  17: { title: "Tested 8 (17/8)", blurb: "Material success, but only through wisdom-tempered ambition." },
+  18: { title: "Activist 9 (18/9)", blurb: "Humanitarian fight. You scrap with the world's wrongs." },
+  19: { title: "Karmic 19 → 1", blurb: "Independence through service. You cannot lead by taking only." },
+  20: { title: "Quiet diplomat (20/2)", blurb: "A 2 amplified — patience, intuition, sacred companionship." },
+  21: { title: "Sparkling 3 (21/3)", blurb: "Joy with social ease. Born to charm an audience." },
+  22: { title: "Master 22", blurb: "Master Builder. Capable of legacy-scale work." },
+  23: { title: "Free 5 (23/5)", blurb: "Versatile, curious, irresistibly adaptable." },
+  24: { title: "Devoted 6 (24/6)", blurb: "Family-builder, counsellor, the dependable one." },
+  25: { title: "Mystic 7 (25/7)", blurb: "Inward, analytical, drawn to esoteric truth." },
+  26: { title: "Power 8 (26/8)", blurb: "Material mastery with diplomatic edge." },
+  27: { title: "Wise 9 (27/9)", blurb: "Old soul with teacherly streak." },
+  28: { title: "Independent 1 (28/1)", blurb: "Leadership softened by partnership skill." },
+  29: { title: "Master 11 / 2", blurb: "Visionary 11 vibration. High intuition, high overwhelm risk." },
+  30: { title: "Polished 3 (30/3)", blurb: "Refined communicator. Big platforms, big audiences." },
+  31: { title: "Patient builder (31/4)", blurb: "Long-game artisan. Steady, detailed, devoted to craft." },
+};
+
+/* ------------------------------ Attitude --------------------------------- */
+export const ATTITUDE_MEANINGS: Record<number, string> = {
+  1: "First impression: confident, direct, takes the lead.",
+  2: "First impression: warm, considerate, easy to talk to.",
+  3: "First impression: playful, sparkling, quick with words.",
+  4: "First impression: serious, dependable, all-business.",
+  5: "First impression: restless, magnetic, slightly unpredictable.",
+  6: "First impression: warm host, caring, present.",
+  7: "First impression: reserved, observant, quietly assessing.",
+  8: "First impression: authoritative, capable, results-oriented.",
+  9: "First impression: idealistic, soulful, slightly distant.",
+  11: "First impression: electric and intense — easy to underestimate.",
+  22: "First impression: composed master builder; gravitas you can feel.",
+  33: "First impression: nurturing teacher; people open up unprompted.",
+};
+
+/* ------------------------------ Pinnacles --------------------------------- */
+export const PINNACLE_MEANINGS: Record<number, string> = {
+  1: "Cycle of independence. Self-definition, originality, standing alone.",
+  2: "Cycle of partnership. Patience, diplomacy, learning to share weight.",
+  3: "Cycle of expression. Creative output, social reach, joyful work.",
+  4: "Cycle of building. Discipline, foundations, work that compounds.",
+  5: "Cycle of change. Travel, freedom, expansion through experience.",
+  6: "Cycle of responsibility. Family, home, service to those near you.",
+  7: "Cycle of inner work. Study, depth, spiritual or analytical retreat.",
+  8: "Cycle of power. Career, money, authority over your domain.",
+  9: "Cycle of completion. Letting go, humanitarianism, broad impact.",
+  11: "Master cycle of vision. Inspired leadership — intense, illuminating.",
+  22: "Master cycle of building. Legacy-scale construction.",
+  33: "Master cycle of service. Teaching, healing, devoted uplift.",
+};
+
+/* ------------------------------ Challenges -------------------------------- */
+export const CHALLENGE_MEANINGS: Record<number, string> = {
+  0: "Choice. No fixed lesson — every challenge type is on offer; you choose your battles.",
+  1: "Asserting yourself without dominating. Find your voice without erasing others'.",
+  2: "Oversensitivity. Stop absorbing every emotion in the room.",
+  3: "Self-doubt around expression. Speak even when the voice shakes.",
+  4: "Disorganisation or rigidity. Find structure without becoming it.",
+  5: "Restlessness. Commit long enough to taste depth, not just novelty.",
+  6: "Over-responsibility. Care without carrying everyone.",
+  7: "Faith. Trust what cannot yet be proven; stop hiding in analysis.",
+  8: "Money and power. Make peace with ambition — neither worship nor refuse it.",
+  9: "Letting go. Stop carrying old griefs; finish what is finished.",
+};
+
+/* --------------------- Name-based number meanings ------------------------- */
+export const NAME_NUMBER_MEANINGS: Record<
+  number,
+  { expression: string; soulUrge: string; personality: string }
+> = {
+  1: {
+    expression: "Born to lead and originate. You're built for direction-setting.",
+    soulUrge: "You hunger for independence and recognition for your own work.",
+    personality: "You come across as confident, decisive, slightly self-contained.",
+  },
+  2: {
+    expression: "Built for partnership and diplomacy. You harmonise systems and people.",
+    soulUrge: "You crave deep companionship, gentleness, emotional safety.",
+    personality: "You read as warm, attentive, easy to confide in.",
+  },
+  3: {
+    expression: "Built for expression and joy. Words, art, charm — your native tools.",
+    soulUrge: "You long to be heard, to create, to brighten rooms.",
+    personality: "You come across as playful, witty, instantly likeable.",
+  },
+  4: {
+    expression: "Built to construct. Method, precision, and useful structure.",
+    soulUrge: "You want stability, order, and work you can stand behind.",
+    personality: "You read as grounded, reliable, all-business.",
+  },
+  5: {
+    expression: "Built for movement. Change, communication, adaptability.",
+    soulUrge: "You crave freedom and novelty above almost anything else.",
+    personality: "You read as kinetic, curious, charmingly unpredictable.",
+  },
+  6: {
+    expression: "Built to care. Family, beauty, justice, healing.",
+    soulUrge: "You long for love, harmony, and a circle that needs you.",
+    personality: "You come across as warm host, protector, present.",
+  },
+  7: {
+    expression: "Built to seek. Analyst, mystic, researcher of inner truths.",
+    soulUrge: "You crave solitude, depth, and the texture of real understanding.",
+    personality: "You read as reserved, thoughtful, slightly elusive.",
+  },
+  8: {
+    expression: "Built for power. Money, command, the long climb.",
+    soulUrge: "You hunger for material mastery and visible achievement.",
+    personality: "You come across as capable, authoritative, results-driven.",
+  },
+  9: {
+    expression: "Built to serve and complete. Humanitarianism, art, broad love.",
+    soulUrge: "You long to give, to heal, to leave the world better.",
+    personality: "You read as worldly, compassionate, a bit otherworldly.",
+  },
+  11: {
+    expression: "Built as a channel. Vision, inspiration, spiritual transmission.",
+    soulUrge: "You crave to illuminate — even at the cost of your nerves.",
+    personality: "You come across as luminous, intense, magnetically odd.",
+  },
+  22: {
+    expression: "Built as Master Builder. Legacy-scale construction is your gift.",
+    soulUrge: "You hunger to build something the world remembers.",
+    personality: "You read as quietly commanding, with unusual gravity.",
+  },
+  33: {
+    expression: "Built as Master Teacher. Devotion, healing, sacrificial service.",
+    soulUrge: "You long to nurture humanity itself.",
+    personality: "You come across as soothing, deeply present, almost parental.",
+  },
+};
+
+export const MATURITY_NOTE =
+  "Your Maturity number activates around age 35 and grows stronger from there. It blends who you are (Life Path) with what you do (Expression).";

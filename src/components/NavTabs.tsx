@@ -8,11 +8,13 @@ import {
   CalendarRange,
   History,
   Sun,
+  User,
   type LucideIcon,
 } from "lucide-react";
 
 const TABS: { href: string; label: string; Icon: LucideIcon }[] = [
   { href: "/", label: "Today", Icon: Sun },
+  { href: "/chart", label: "Chart", Icon: User },
   { href: "/calendar", label: "Month", Icon: CalendarDays },
   { href: "/year", label: "Year", Icon: CalendarRange },
   { href: "/timeline", label: "Timeline", Icon: History },
