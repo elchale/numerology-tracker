@@ -51,7 +51,9 @@ export function DayCell({
           ? `linear-gradient(160deg, ${meta.color}22, ${meta.color}06 60%, transparent), var(--color-ink-1)`
           : "var(--color-ink-1)",
       }}
-      aria-label={`${day}, ${meta.label}, personal day ${info.personalDay}`}
+      aria-label={`${day}, ${meta.label}, personal day ${info.personalDay}${
+        info.frictionDay ? ", friction day" : ""
+      }`}
     >
       <span
         className={[
@@ -75,6 +77,12 @@ export function DayCell({
           style={{ color: meta.color }}
           size={10}
           strokeWidth={2.25}
+        />
+      )}
+      {info.frictionDay && (
+        <span
+          aria-hidden
+          className="absolute top-1 right-1 sm:top-1.5 sm:right-1.5 w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-amber"
         />
       )}
       <span

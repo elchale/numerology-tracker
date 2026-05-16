@@ -6,6 +6,7 @@ import type {
   MonthSummary,
   YearSummary,
 } from "./types";
+import { COMPATIBILITY } from "./meanings";
 
 const MASTER_NUMBERS = new Set([11, 22, 33]);
 const KARMIC_NUMBERS = new Set([13, 14, 16, 19]);
@@ -148,6 +149,24 @@ export function classifyDay(
   }
 }
 
+/**
+ * A "friction day" runs a Personal Day number that sits in the friction set
+ * of the person's Life Path (per the number-compatibility table). The day is
+ * still workable — its energy simply pulls against the grain of who they are.
+ * Master days and Life Path peak days are never friction days.
+ */
+export function isFrictionDay(
+  personalDayValue: number,
+  lifePathValue: number,
+): boolean {
+  if (MASTER_NUMBERS.has(personalDayValue)) return false;
+  if (personalDayValue === lifePathValue) return false;
+  const lpRoot = MASTER_NUMBERS.has(lifePathValue)
+    ? digitSum(lifePathValue)
+    : lifePathValue;
+  return COMPATIBILITY[lpRoot]?.friction.includes(personalDayValue) ?? false;
+}
+
 export function getDayInfo(
   birth: BirthDate,
   year: number,
@@ -167,6 +186,7 @@ export function getDayInfo(
     type: classifyDay(pd, lp),
     isMaster: MASTER_NUMBERS.has(pd),
     lifePathAlignment: pd === lp,
+    frictionDay: isFrictionDay(pd, lp),
   };
 }
 
@@ -194,7 +214,7 @@ export function getNextLuckyDays(
       info.personalDay === 3 ||
       info.personalDay === 8;
 
-    if (isLucky) {
+    if (isLucky && !info.frictionDay) {
       const reason =
         info.isMaster
           ? `Master ${info.personalDay} energy`
@@ -231,14 +251,16 @@ export function getMonthSummary(
   const total = daysInMonth(year, month);
   const peakDays: number[] = [];
   const masterDays: number[] = [];
+  const frictionDays: number[] = [];
 
   for (let d = 1; d <= total; d += 1) {
     const info = getDayInfo(birth, year, month, d);
     if (info.lifePathAlignment && !info.isMaster) peakDays.push(d);
     if (info.isMaster) masterDays.push(d);
+    if (info.frictionDay) frictionDays.push(d);
   }
 
-  return { year, month, personalMonth: pm, peakDays, masterDays };
+  return { year, month, personalMonth: pm, peakDays, masterDays, frictionDays };
 }
 
 export function getYearSummary(birth: BirthDate, year: number): YearSummary {

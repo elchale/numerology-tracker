@@ -408,3 +408,12 @@ export const NAME_NUMBER_MEANINGS: Record<
 
 export const MATURITY_NOTE =
   "Your Maturity number activates around age 35 and grows stronger from there. It blends who you are (Life Path) with what you do (Expression).";
+
+/* ------------------------------ Friction days ----------------------------- */
+/**
+ * A friction day runs a Personal Day number that sits in the friction set of
+ * the viewer's Life Path. Not a bad day — just one whose energy works against
+ * the grain, so it asks for a lighter touch.
+ */
+export const FRICTION_NOTE =
+  "This day runs a number that sits in friction with your Life Path. Nothing is wrong with it — the energy simply pulls against your natural grain. Push gently, avoid forcing big outcomes, and don't take the resistance personally.";

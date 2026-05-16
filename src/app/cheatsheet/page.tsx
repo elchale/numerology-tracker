@@ -159,6 +159,13 @@ export default function CheatsheetPage() {
             );
           })}
         </div>
+        <p className="text-text/80 text-[14px] mt-5 leading-relaxed max-w-2xl">
+          <span style={{ color: "var(--color-amber)" }}>Friction days</span>{" "}
+          are flagged separately on the calendar (a small amber dot) — days
+          whose Personal Day number sits in friction with your Life Path. The
+          day still works; its energy just runs against your grain, so move
+          gently and avoid forcing big outcomes.
+        </p>
       </section>
 
       <section className="mb-12 sm:mb-16">

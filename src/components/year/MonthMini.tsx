@@ -1,6 +1,6 @@
 "use client";
 
-import { Crown, Sparkles } from "lucide-react";
+import { AlertTriangle, Crown, Sparkles } from "lucide-react";
 import { getDayInfo, personalMonth } from "@/lib/numerology";
 import type { BirthDate } from "@/lib/types";
 import { DAY_TYPE_META } from "@/lib/meanings";
@@ -25,6 +25,7 @@ export function MonthMini({ birth, year, month, onClick }: Props) {
 
   let masters = 0;
   let peaks = 0;
+  let friction = 0;
 
   const cells: Array<{
     day: number;
@@ -39,6 +40,7 @@ export function MonthMini({ birth, year, month, onClick }: Props) {
     const special = info.isMaster || info.lifePathAlignment;
     if (info.isMaster) masters += 1;
     if (info.lifePathAlignment && !info.isMaster) peaks += 1;
+    if (info.frictionDay) friction += 1;
     cells.push({
       day: d,
       color: meta.color,
@@ -100,7 +102,13 @@ export function MonthMini({ birth, year, month, onClick }: Props) {
             {peaks}
           </span>
         )}
-        {masters === 0 && peaks === 0 && (
+        {friction > 0 && (
+          <span className="chip" style={{ color: "var(--color-amber)" }}>
+            <AlertTriangle size={11} strokeWidth={2.25} aria-hidden />
+            {friction}
+          </span>
+        )}
+        {masters === 0 && peaks === 0 && friction === 0 && (
           <span className="text-muted-2">Steady month</span>
         )}
       </div>

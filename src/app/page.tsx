@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
-import { ArrowRight, Crown } from "lucide-react";
+import { AlertTriangle, ArrowRight, Crown } from "lucide-react";
 import { useConfig } from "@/store/useConfig";
 import { RequireConfig } from "@/components/RequireConfig";
 import { NumberCard } from "@/components/NumberCard";
@@ -99,7 +99,7 @@ function Dashboard() {
         />
       </section>
 
-      {(info.lifePathAlignment || info.isMaster) && (
+      {(info.lifePathAlignment || info.isMaster || info.frictionDay) && (
         <section className="card p-5 sm:p-7 flex flex-wrap items-start gap-4">
           <DayBadge type={info.type} />
           {info.lifePathAlignment && !info.isMaster && (
@@ -111,10 +111,24 @@ function Dashboard() {
               Your Life Path activates today
             </span>
           )}
+          {info.frictionDay && (
+            <span
+              className="chip"
+              style={{
+                color: "var(--color-amber)",
+                borderColor: "hsl(35 92% 62% / 0.45)",
+              }}
+            >
+              <AlertTriangle size={12} strokeWidth={2.25} aria-hidden />
+              Friction with your Life Path
+            </span>
+          )}
           <p className="text-text/90 flex-1 min-w-[260px] text-[14.5px] leading-relaxed">
             {info.isMaster
               ? "You are inside a high-voltage day. Protect your nervous system and trust the signals."
-              : "The frequency of your Life Path is dominant today — what you start now carries unusual weight."}
+              : info.lifePathAlignment
+                ? "The frequency of your Life Path is dominant today — what you start now carries unusual weight."
+                : "Today runs a number that pulls against your Life Path. Workable, but move gently — don't force big outcomes."}
           </p>
         </section>
       )}

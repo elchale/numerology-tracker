@@ -28,6 +28,8 @@ export interface DayInfo {
   type: DayType;
   isMaster: boolean;
   lifePathAlignment: boolean;
+  /** Personal Day number clashes with the Life Path (number-compatibility friction). */
+  frictionDay: boolean;
 }
 
 export interface LuckyDay {
@@ -43,6 +45,7 @@ export interface MonthSummary {
   personalMonth: number;
   peakDays: number[];
   masterDays: number[];
+  frictionDays: number[];
 }
 
 export interface YearSummary {

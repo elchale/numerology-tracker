@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Crown, X } from "lucide-react";
+import { AlertTriangle, Crown, X } from "lucide-react";
 import { getDayInfo, universalDay } from "@/lib/numerology";
 import {
   DAY_TYPE_META,
+  FRICTION_NOTE,
   LIFE_PATH_MEANINGS,
   PERSONAL_YEAR_MEANINGS,
   UNIVERSAL_MEANING,
@@ -132,6 +133,18 @@ function PanelBody({
               Life Path alignment
             </span>
           )}
+          {info.frictionDay && (
+            <span
+              className="chip"
+              style={{
+                borderColor: "hsl(35 92% 62% / 0.45)",
+                color: "var(--color-amber)",
+              }}
+            >
+              <AlertTriangle size={12} strokeWidth={2.25} aria-hidden />
+              Friction day
+            </span>
+          )}
         </div>
       </header>
 
@@ -147,6 +160,14 @@ function PanelBody({
           {meta.tone}
         </p>
       </div>
+
+      {info.frictionDay && (
+        <Block title="Friction with your Life Path" tone="caution">
+          <p className="text-text/85 leading-relaxed text-[14.5px]">
+            {FRICTION_NOTE}
+          </p>
+        </Block>
+      )}
 
       {dayMeaning && (
         <Block title={`Day Number ${info.personalDay} — ${dayMeaning.title}`}>
@@ -222,16 +243,17 @@ function Block({
 }: {
   title: string;
   children: React.ReactNode;
-  tone?: "danger";
+  tone?: "danger" | "caution";
 }) {
+  const titleColor =
+    tone === "danger"
+      ? "text-danger"
+      : tone === "caution"
+        ? "text-amber"
+        : "text-text-strong";
   return (
     <div className="px-5 sm:px-7 py-5 border-t border-line-soft">
-      <h3
-        className={[
-          "display text-xl mb-2",
-          tone === "danger" ? "text-danger" : "text-text-strong",
-        ].join(" ")}
-      >
+      <h3 className={["display text-xl mb-2", titleColor].join(" ")}>
         {title}
       </h3>
       {children}
