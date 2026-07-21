@@ -3,10 +3,12 @@
 import { Sparkles } from "lucide-react";
 import { DAY_TYPE_META } from "@/lib/meanings";
 import type { DayInfo } from "@/lib/types";
+import type { AstroEvent } from "@/lib/astro/types";
 
 interface Props {
   day: number;
   info: DayInfo | null;
+  astro?: AstroEvent[];
   isToday?: boolean;
   isSelected?: boolean;
   isOutside?: boolean;
@@ -16,6 +18,7 @@ interface Props {
 export function DayCell({
   day,
   info,
+  astro,
   isToday,
   isSelected,
   isOutside,
@@ -28,6 +31,8 @@ export function DayCell({
   }
   const meta = DAY_TYPE_META[info.type];
   const isSpecial = info.isMaster || info.lifePathAlignment;
+  const events = astro ?? [];
+  const marker = events[0];
 
   return (
     <button
@@ -53,7 +58,7 @@ export function DayCell({
       }}
       aria-label={`${day}, ${meta.label}, personal day ${info.personalDay}${
         info.frictionDay ? ", friction day" : ""
-      }`}
+      }${events.length ? `. ${events.map((e) => e.title).join(", ")}` : ""}`}
     >
       <span
         className={[
@@ -94,6 +99,32 @@ export function DayCell({
       >
         {info.personalDay}
       </span>
+
+      {marker && (
+        <span
+          aria-hidden
+          className="absolute bottom-0.5 left-1 sm:bottom-1.5 sm:left-1.5 flex items-center gap-0.5"
+        >
+          <marker.Icon
+            size={9}
+            strokeWidth={2.5}
+            style={{ color: marker.color }}
+            className="sm:hidden"
+          />
+          <marker.Icon
+            size={11}
+            strokeWidth={2.25}
+            style={{ color: marker.color }}
+            className="hidden sm:block"
+          />
+          {events.length > 1 && (
+            <span
+              className="w-[3px] h-[3px] rounded-full"
+              style={{ background: events[1].color }}
+            />
+          )}
+        </span>
+      )}
 
       {isToday && (
         <span

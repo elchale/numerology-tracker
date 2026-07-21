@@ -14,6 +14,8 @@ import { RequireConfig } from "@/components/RequireConfig";
 import { MonthView } from "@/components/calendar/MonthView";
 import { DayDetailPanel } from "@/components/calendar/DayDetailPanel";
 import { getMonthSummary, personalMonth } from "@/lib/numerology";
+import { ASTRO_CATEGORY_META } from "@/lib/astro/meanings";
+import type { AstroCategory } from "@/lib/astro/types";
 import type { LucideIcon } from "lucide-react";
 
 const MONTHS = [
@@ -174,11 +176,23 @@ function CalendarInner() {
         </div>
       </header>
 
-      <div className="mb-3 flex flex-wrap items-center gap-3 text-[11px] text-muted-2">
+      <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-2 text-[11px] text-muted-2">
         <Legend color="var(--color-gold)" label="Master" Icon={Sparkles} />
         <Legend color="var(--color-cyan)" label="Life Path peak" Icon={Crown} />
         <Legend color="var(--color-amber)" label="Friction" Icon={AlertTriangle} />
-        <span className="text-muted-2 hidden sm:inline ml-auto">
+        <span aria-hidden className="w-px h-3 bg-line" />
+        {(Object.keys(ASTRO_CATEGORY_META) as AstroCategory[]).map((key) => {
+          const meta = ASTRO_CATEGORY_META[key];
+          return (
+            <Legend
+              key={key}
+              color={meta.color}
+              label={meta.label}
+              Icon={meta.Icon}
+            />
+          );
+        })}
+        <span className="text-muted-2 hidden lg:inline ml-auto">
           Arrow keys to change month · T for today · Esc to close
         </span>
       </div>

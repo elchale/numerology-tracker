@@ -2,7 +2,9 @@
 
 import { useMemo } from "react";
 import { getDayInfo } from "@/lib/numerology";
+import { getAstroEvents } from "@/lib/astro/events";
 import type { BirthDate, DayInfo } from "@/lib/types";
+import type { AstroEvent } from "@/lib/astro/types";
 import { DayCell } from "./DayCell";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -20,6 +22,7 @@ interface CellEntry {
   key: string;
   day: number;
   info: DayInfo | null;
+  astro: AstroEvent[];
   isOutside: boolean;
   isToday: boolean;
 }
@@ -46,6 +49,7 @@ export function MonthView({
         key: `p-${d}`,
         day: d,
         info: getDayInfo(birth, prevYear, prevMonth, d),
+        astro: getAstroEvents(prevYear, prevMonth, d),
         isOutside: true,
         isToday: false,
       });
@@ -61,6 +65,7 @@ export function MonthView({
         key: `m-${d}`,
         day: d,
         info,
+        astro: getAstroEvents(year, month, d),
         isOutside: false,
         isToday,
       });
@@ -74,6 +79,7 @@ export function MonthView({
         key: `n-${i}`,
         day: i,
         info: getDayInfo(birth, nextYear, nextMonth, i),
+        astro: getAstroEvents(nextYear, nextMonth, i),
         isOutside: true,
         isToday: false,
       });
@@ -99,6 +105,7 @@ export function MonthView({
             key={c.key}
             day={c.day}
             info={c.info}
+            astro={c.astro}
             isToday={c.isToday}
             isSelected={
               !c.isOutside &&

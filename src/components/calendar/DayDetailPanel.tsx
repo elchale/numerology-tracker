@@ -12,6 +12,9 @@ import {
 } from "@/lib/meanings";
 import type { BirthDate } from "@/lib/types";
 import { DayBadge } from "@/components/DayBadge";
+import { AstroChip } from "@/components/astro/AstroChip";
+import { SkyBlock } from "@/components/astro/SkyBlock";
+import { getAstroEvents } from "@/lib/astro/events";
 
 interface Props {
   birth: BirthDate;
@@ -92,6 +95,7 @@ function PanelBody({
   const universal = universalDay(year, month, day);
   const date = new Date(year, month - 1, day);
   const weekday = date.toLocaleDateString("en-US", { weekday: "long" });
+  const astroEvents = getAstroEvents(year, month, day);
 
   return (
     <article
@@ -145,6 +149,9 @@ function PanelBody({
               Friction day
             </span>
           )}
+          {astroEvents.map((event) => (
+            <AstroChip key={event.id} entry={event} />
+          ))}
         </div>
       </header>
 
@@ -194,6 +201,8 @@ function PanelBody({
           </p>
         </Block>
       )}
+
+      <SkyBlock year={year} month={month} day={day} />
 
       <Block title="Universal Day">
         <p className="text-text/90 leading-relaxed text-[14.5px]">
